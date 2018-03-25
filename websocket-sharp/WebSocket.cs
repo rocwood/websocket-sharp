@@ -3375,6 +3375,19 @@ namespace WebSocketSharp
       send (Opcode.Binary, new MemoryStream (data));
     }
 
+    public void Send (byte[] data, int index, int count)
+    {
+      if (_readyState != WebSocketState.Open) {
+        var msg = "The current state of the connection is not Open.";
+        throw new InvalidOperationException (msg);
+      }
+
+      if (data == null)
+        throw new ArgumentNullException ("data");
+
+      send (Opcode.Binary, new MemoryStream (data, index, count));
+    }	
+
     /// <summary>
     /// Sends the specified file using the WebSocket connection.
     /// </summary>
@@ -3575,6 +3588,19 @@ namespace WebSocketSharp
         throw new ArgumentNullException ("data");
 
       sendAsync (Opcode.Binary, new MemoryStream (data), completed);
+    }
+
+	public void SendAsync (byte[] data, int index, int count, Action<bool> completed)
+    {
+      if (_readyState != WebSocketState.Open) {
+        var msg = "The current state of the connection is not Open.";
+        throw new InvalidOperationException (msg);
+      }
+
+      if (data == null)
+        throw new ArgumentNullException ("data");
+
+      sendAsync (Opcode.Binary, new MemoryStream (data, index, count), completed);
     }
 
     /// <summary>
